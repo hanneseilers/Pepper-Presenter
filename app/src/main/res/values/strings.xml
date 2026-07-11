@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Pepper Presenter</string>
+    <string name="hint_title">Title</string>
+    <string name="hint_content">Enter presentation text here…</string>
+    <string name="button_new">New</string>
+    <string name="button_load">Load</string>
+    <string name="button_save">Save</string>
+    <string name="button_speak">Speak</string>
+    <string name="dialog_load_title">Load Presentation</string>
+    <string name="dialog_no_presentations">No saved presentations found.</string>
+    <string name="msg_saved">Presentation saved.</string>
+    <string name="msg_save_error">Failed to save presentation.</string>
+    <string name="msg_load_error">Failed to load presentation.</string>
+    <string name="msg_title_required">Please enter a title.</string>
+    <string name="msg_content_required">Please enter some text.</string>
+    <string name="msg_robot_not_ready">Robot not ready yet.</string>
 </resources>
