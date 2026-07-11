@@ -118,8 +118,7 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks {
     }
 
     private fun speakPresentation() {
-        val context = robotContext
-        if (context == null) {
+        if (robotContext == null) {
             Toast.makeText(this, R.string.msg_robot_not_ready, Toast.LENGTH_SHORT).show()
             return
         }
@@ -130,7 +129,8 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks {
             return
         }
 
-        presentationManager.speak(context, content)
+        val sentences = ArrayList(content.split("\n").map { it.trim() }.filter { it.isNotBlank() })
+        startActivity(SpeakActivity.createIntent(this, sentences))
     }
 }
 
