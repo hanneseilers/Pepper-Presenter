@@ -16,6 +16,7 @@ import com.aldebaran.qi.sdk.`object`.conversation.Phrase
 import com.aldebaran.qi.sdk.`object`.conversation.Say
 import com.aldebaran.qi.sdk.`object`.touch.TouchSensor
 import com.aldebaran.qi.sdk.design.activity.RobotActivity
+import com.aldebaran.qi.sdk.design.activity.conversationstatus.SpeechBarDisplayStrategy
 
 /**
  * Full-screen black activity that speaks a presentation sentence by sentence.
@@ -71,6 +72,8 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setSpeechBarDisplayStrategy(SpeechBarDisplayStrategy.IMMERSIVE)
 
         // Keep screen on and make it fully black (hide system UI)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
