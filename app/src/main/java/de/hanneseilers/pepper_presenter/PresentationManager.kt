@@ -1,10 +1,6 @@
 package de.hanneseilers.pepper_presenter
 
 import android.content.Context
-import com.aldebaran.qi.sdk.QiContext
-import com.aldebaran.qi.sdk.builder.SayBuilder
-import com.aldebaran.qi.sdk.`object`.conversation.Phrase
-import com.aldebaran.qi.sdk.`object`.conversation.Say
 import java.io.File
 import java.io.IOException
 
