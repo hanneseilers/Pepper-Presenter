@@ -2,11 +2,11 @@ apply(plugin = "com.android.application")
 apply(plugin = "org.jetbrains.kotlin.android")
 
 android {
-    namespace = "com.hanneseilers.pepperpresenter"
+    namespace = "de.hanneseilers.pepper_presenter"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.hanneseilers.pepperpresenter"
+        applicationId = "de.hanneseilers.pepper_presenter"
         minSdk = 23
         targetSdk = 34
         versionCode = 1

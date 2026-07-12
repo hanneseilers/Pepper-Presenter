@@ -1,4 +1,4 @@
-package com.hanneseilers.pepperpresenter
+package de.hanneseilers.pepper_presenter
 
 import android.content.Context
 import com.aldebaran.qi.sdk.builder.SayBuilder
