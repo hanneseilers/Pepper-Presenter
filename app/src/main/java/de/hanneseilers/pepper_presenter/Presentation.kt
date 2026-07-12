@@ -1,4 +1,4 @@
-package com.hanneseilers.pepperpresenter
+package de.hanneseilers.pepper_presenter
 
 data class Presentation(
     val title: String,
