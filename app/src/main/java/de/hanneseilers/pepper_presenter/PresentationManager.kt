@@ -43,7 +43,7 @@ class PresentationManager {
     }
 
     /**
-     * Loads a presentation from [file].
+     * Loads a presentation from [File].
      * @return The loaded [Presentation], or `null` if the file cannot be read.
      */
     fun load(context: Context, fileName: String): Presentation? {
@@ -75,20 +75,5 @@ class PresentationManager {
     fun delete(context: Context, fileName: String): Boolean {
         val file = File(storageDir(context), fileName)
         return file.exists() && file.delete()
-    }
-
-    // ── Speech ───────────────────────────────────────────────────────────────
-
-    /**
-     * Makes Pepper say [text] using the provided [robotContext].
-     * The call is asynchronous and returns immediately.
-     * Errors during speech synthesis are silently ignored.
-     */
-    fun speak(robotContext: QiContext, text: String) {
-        SayBuilder.with(robotContext)
-            .withPhrase(Phrase(text))
-            .buildAsync()
-            .andThenCompose { say: Say -> say.async().run() }
-            .thenConsume { /* errors are intentionally swallowed here */ }
     }
 }
