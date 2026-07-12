@@ -1,4 +1,4 @@
-package com.hanneseilers.pepperpresenter
+package de.hanneseilers.pepper_presenter
 
 import android.os.Bundle
 import android.widget.Button
