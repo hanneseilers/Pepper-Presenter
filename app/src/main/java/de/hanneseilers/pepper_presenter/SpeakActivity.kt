@@ -8,6 +8,7 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
+import com.aldebaran.qi.sdk.QiContext
 import com.aldebaran.qi.sdk.QiSDK
 import com.aldebaran.qi.sdk.RobotLifecycleCallbacks
 import com.aldebaran.qi.sdk.builder.SayBuilder
@@ -15,7 +16,6 @@ import com.aldebaran.qi.sdk.`object`.conversation.Phrase
 import com.aldebaran.qi.sdk.`object`.conversation.Say
 import com.aldebaran.qi.sdk.`object`.touch.TouchSensor
 import com.aldebaran.qi.sdk.design.activity.RobotActivity
-import com.aldebaran.qi.sdk.robot.RobotContext
 
 /**
  * Full-screen black activity that speaks a presentation sentence by sentence.
@@ -95,7 +95,7 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
 
     // ── RobotLifecycleCallbacks ──────────────────────────────────────────────
 
-    override fun onRobotFocusGained(robotContext: RobotContext) {
+    override fun onRobotFocusGained(robotContext: QiContext) {
         setupTouchListeners(robotContext)
         speakCurrent(robotContext)
     }
@@ -109,7 +109,7 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
 
     // ── Touch / Bumper listeners ─────────────────────────────────────────────
 
-    private fun setupTouchListeners(robotContext: RobotContext) {
+    private fun setupTouchListeners(robotContext: QiContext) {
         val touch = robotContext.touch
         sensorNames.forEach { name ->
             try {
@@ -131,7 +131,7 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
      * Synchronized to prevent two rapid touches from both advancing the index.
      */
     @Synchronized
-    private fun handleAdvance(robotContext: RobotContext) {
+    private fun handleAdvance(robotContext: QiContext) {
         if (!isWaitingForTouch) return
         isWaitingForTouch = false
 
@@ -151,7 +151,7 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
     }
 
     /** Speaks [sentences][currentIndex] and sets state flags before and after. */
-    private fun speakCurrent(robotContext: RobotContext) {
+    private fun speakCurrent(robotContext: QiContext) {
         isSpeaking = true
         isWaitingForTouch = false
         SayBuilder.with(robotContext)

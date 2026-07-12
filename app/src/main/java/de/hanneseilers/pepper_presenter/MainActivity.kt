@@ -11,7 +11,7 @@ import com.aldebaran.qi.sdk.builder.SayBuilder
 import com.aldebaran.qi.sdk.`object`.conversation.Phrase
 import com.aldebaran.qi.sdk.`object`.conversation.Say
 import com.aldebaran.qi.sdk.design.activity.RobotActivity
-import com.aldebaran.qi.sdk.robot.RobotContext
+import com.aldebaran.qi.sdk.QiContext
 
 class MainActivity : RobotActivity(), RobotLifecycleCallbacks {
 
@@ -25,7 +25,7 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks {
     private val presentationManager = PresentationManager()
 
     @Volatile
-    private var robotContext: RobotContext? = null
+    private var robotContext: QiContext? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,12 +52,14 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks {
 
     // ── RobotLifecycleCallbacks ──────────────────────────────────────────────
 
-    override fun onRobotFocusGained(context: RobotContext) {
+    override fun onRobotFocusGained(context: QiContext) {
         robotContext = context
         SayBuilder.with(context)
             .withPhrase(Phrase(getString(R.string.app_name) + " is ready."))
             .buildAsync()
             .andThenCompose { say: Say -> say.async().run() }
+            .andThenConsume { /* No action needed after speaking */ }
+            .onError { throwable -> throwable.printStackTrace() }
     }
 
     override fun onRobotFocusLost() {

@@ -1,10 +1,10 @@
 package de.hanneseilers.pepper_presenter
 
 import android.content.Context
+import com.aldebaran.qi.sdk.QiContext
 import com.aldebaran.qi.sdk.builder.SayBuilder
 import com.aldebaran.qi.sdk.`object`.conversation.Phrase
 import com.aldebaran.qi.sdk.`object`.conversation.Say
-import com.aldebaran.qi.sdk.robot.RobotContext
 import java.io.File
 import java.io.IOException
 
@@ -75,7 +75,7 @@ class PresentationManager {
      * The call is asynchronous and returns immediately.
      * Errors during speech synthesis are silently ignored.
      */
-    fun speak(robotContext: RobotContext, text: String) {
+    fun speak(robotContext: QiContext, text: String) {
         SayBuilder.with(robotContext)
             .withPhrase(Phrase(text))
             .buildAsync()
