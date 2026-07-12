@@ -1,6 +1,0 @@
-# TODO
-
-[x] add delete text button and functionality
-[x] add simple icons to buttons
-[] remove robot speech bar (look at qisdk documentation!)
-[x] modify presentation speak behaviour to start speaking after! a sensor is triggered. also for the first sentence
