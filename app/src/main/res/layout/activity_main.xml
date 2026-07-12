@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
+    android:visibility="visible"
     tools:context=".MainActivity">
 
     <EditText
@@ -21,10 +22,10 @@
         android:id="@+id/editTextContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_marginTop="12dp"
-        android:hint="@string/hint_content"
+        android:layout_weight="1"
         android:gravity="top|start"
+        android:hint="@string/hint_content"
         android:inputType="textMultiLine"
         android:scrollbars="vertical"
         android:textSize="16sp" />
@@ -39,8 +40,8 @@
             android:id="@+id/buttonNew"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginEnd="4dp"
+            android:layout_weight="1"
             android:drawableStart="@drawable/ic_new"
             android:drawablePadding="6dp"
             android:text="@string/button_new" />
@@ -49,9 +50,9 @@
             android:id="@+id/buttonLoad"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
+            android:layout_weight="1"
             android:drawableStart="@drawable/ic_load"
             android:drawablePadding="6dp"
             android:text="@string/button_load" />
@@ -60,9 +61,9 @@
             android:id="@+id/buttonSave"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
+            android:layout_weight="1"
             android:drawableStart="@drawable/ic_save"
             android:drawablePadding="6dp"
             android:text="@string/button_save" />
@@ -71,9 +72,9 @@
             android:id="@+id/buttonDelete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
+            android:layout_weight="1"
             android:drawableStart="@drawable/ic_delete"
             android:drawablePadding="6dp"
             android:text="@string/button_delete" />
@@ -86,7 +87,6 @@
             android:layout_weight="1"
             android:drawableStart="@drawable/ic_speak"
             android:drawablePadding="6dp"
-            android:enabled="false"
             android:text="@string/button_speak" />
 
     </LinearLayout>

@@ -65,7 +65,6 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks {
             .andThenCompose {
                     say: Say -> say.async().run()
             }
-            .andThenConsume { buttonSpeak.isEnabled = true }
             .thenConsume { future ->
                 if (future.hasError()) {
                     future.error.printStackTrace()
