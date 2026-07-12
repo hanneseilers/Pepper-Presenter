@@ -55,7 +55,7 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks {
     override fun onRobotFocusGained(context: QiContext) {
         robotContext = context
         SayBuilder.with(context)
-            .withPhrase(Phrase(getString(R.string.app_name) + " is ready."))
+            .withPhrase(Phrase(getString(R.string.app_name) + " ist startklar."))
             .buildAsync()
             .andThenCompose { say: Say -> say.async().run() }
             .thenConsume { future ->
