@@ -22,7 +22,7 @@ import com.aldebaran.qi.sdk.design.activity.RobotActivity
  *
  * The first sentence is spoken automatically when the robot gains focus.
  * Each subsequent sentence — and the final return to [MainActivity] — is
- * triggered by touching the head-middle touch sensor or either rear bumper.
+ * triggered by touching the head sensor or one of the three foot bumpers.
  */
 class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
 
@@ -37,9 +37,10 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
 
     // Names of the touch sensors we listen to
     private val sensorNames = listOf(
-        "Head/Touch/Middle",
-        "Bumper/Back/Left",
-        "Bumper/Back/Right"
+        "Head/Touch",
+        "Bumper/FrontLeft",
+        "Bumper/FrontRight",
+        "Bumper/Back"
     )
 
     private lateinit var sentences: List<String>

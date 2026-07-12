@@ -58,8 +58,11 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks {
             .withPhrase(Phrase(getString(R.string.app_name) + " is ready."))
             .buildAsync()
             .andThenCompose { say: Say -> say.async().run() }
-            .andThenConsume { /* No action needed after speaking */ }
-            .onError { throwable -> throwable.printStackTrace() }
+            .thenConsume { future ->
+                if (future.hasError()) {
+                    future.error.printStackTrace()
+                }
+            }
     }
 
     override fun onRobotFocusLost() {
