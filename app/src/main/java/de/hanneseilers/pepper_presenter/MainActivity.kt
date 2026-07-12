@@ -20,6 +20,7 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks {
     private lateinit var buttonNew: Button
     private lateinit var buttonLoad: Button
     private lateinit var buttonSave: Button
+    private lateinit var buttonDelete: Button
     private lateinit var buttonSpeak: Button
 
     private val presentationManager = PresentationManager()
@@ -37,11 +38,13 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks {
         buttonNew = findViewById(R.id.buttonNew)
         buttonLoad = findViewById(R.id.buttonLoad)
         buttonSave = findViewById(R.id.buttonSave)
+        buttonDelete = findViewById(R.id.buttonDelete)
         buttonSpeak = findViewById(R.id.buttonSpeak)
 
         buttonNew.setOnClickListener { clearPresentation() }
         buttonLoad.setOnClickListener { showLoadDialog() }
         buttonSave.setOnClickListener { savePresentation() }
+        buttonDelete.setOnClickListener { showDeleteDialog() }
         buttonSpeak.setOnClickListener { speakPresentation() }
     }
 
@@ -118,6 +121,23 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks {
                         }
                     }
                 }.start()
+            }
+            .show()
+    }
+
+    private fun showDeleteDialog() {
+        val fileNames = presentationManager.listFileNames(this)
+        if (fileNames.isEmpty()) {
+            Toast.makeText(this, R.string.dialog_no_presentations, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle(R.string.dialog_delete_title)
+            .setItems(fileNames.toTypedArray()) { _, index ->
+                val success = presentationManager.delete(this, fileNames[index])
+                val msgRes = if (success) R.string.msg_deleted else R.string.msg_delete_error
+                Toast.makeText(this, msgRes, Toast.LENGTH_SHORT).show()
             }
             .show()
     }

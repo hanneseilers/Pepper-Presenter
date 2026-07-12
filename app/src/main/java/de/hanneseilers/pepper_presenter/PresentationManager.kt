@@ -68,6 +68,15 @@ class PresentationManager {
             ?.sorted()
             ?: emptyList()
 
+    /**
+     * Deletes the presentation stored under [fileName].
+     * @return `true` on success, `false` if the file does not exist or deletion failed.
+     */
+    fun delete(context: Context, fileName: String): Boolean {
+        val file = File(storageDir(context), fileName)
+        return file.exists() && file.delete()
+    }
+
     // ── Speech ───────────────────────────────────────────────────────────────
 
     /**

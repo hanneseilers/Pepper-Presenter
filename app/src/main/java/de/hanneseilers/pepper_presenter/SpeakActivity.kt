@@ -20,9 +20,9 @@ import com.aldebaran.qi.sdk.design.activity.RobotActivity
 /**
  * Full-screen black activity that speaks a presentation sentence by sentence.
  *
- * The first sentence is spoken automatically when the robot gains focus.
- * Each subsequent sentence — and the final return to [MainActivity] — is
- * triggered by touching the head sensor or one of the three foot bumpers.
+ * Every sentence — including the first — is triggered by touching the head
+ * sensor or one of the three foot bumpers.  After the last sentence has been
+ * spoken, one additional touch returns to [MainActivity].
  */
 class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
 
@@ -44,7 +44,7 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
     )
 
     private lateinit var sentences: List<String>
-    private var currentIndex = 0
+    private var currentIndex = -1
 
     /** True while the robot is currently speaking a sentence. */
     @Volatile
@@ -98,7 +98,8 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
 
     override fun onRobotFocusGained(robotContext: QiContext) {
         setupTouchListeners(robotContext)
-        speakCurrent(robotContext)
+        // Wait for the first sensor touch before speaking the first sentence
+        isWaitingForTouch = true
     }
 
     override fun onRobotFocusLost() {

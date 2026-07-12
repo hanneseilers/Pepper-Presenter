@@ -41,6 +41,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="4dp"
+            android:drawableStart="@drawable/ic_new"
+            android:drawablePadding="6dp"
             android:text="@string/button_new" />
 
         <Button
@@ -50,6 +52,8 @@
             android:layout_weight="1"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
+            android:drawableStart="@drawable/ic_load"
+            android:drawablePadding="6dp"
             android:text="@string/button_load" />
 
         <Button
@@ -59,7 +63,20 @@
             android:layout_weight="1"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
+            android:drawableStart="@drawable/ic_save"
+            android:drawablePadding="6dp"
             android:text="@string/button_save" />
+
+        <Button
+            android:id="@+id/buttonDelete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:drawableStart="@drawable/ic_delete"
+            android:drawablePadding="6dp"
+            android:text="@string/button_delete" />
 
         <Button
             android:id="@+id/buttonSpeak"
@@ -67,6 +84,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="4dp"
+            android:drawableStart="@drawable/ic_speak"
+            android:drawablePadding="6dp"
             android:text="@string/button_speak" />
 
     </LinearLayout>
