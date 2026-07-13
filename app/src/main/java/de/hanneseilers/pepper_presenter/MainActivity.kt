@@ -100,8 +100,8 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks,
 
     override fun onClientDisconnected() {
         runOnUiThread {
-            buttonWsSend.visibility = View.GONE
-            buttonWsCancel.visibility = View.GONE
+            buttonWsSend.visibility = View.INVISIBLE
+            buttonWsCancel.visibility = View.INVISIBLE
         }
     }
 

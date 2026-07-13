@@ -30,20 +30,20 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="4dp"
-            android:src="@drawable/ic_ws_send"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/ws_send"
-            android:visibility="gone" />
+            android:src="@drawable/ic_ws_send"
+            android:visibility="invisible" />
 
         <ImageButton
             android:id="@+id/buttonWsCancel"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="4dp"
-            android:src="@drawable/ic_ws_cancel"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/ws_cancel"
-            android:visibility="gone" />
+            android:src="@drawable/ic_ws_cancel"
+            android:visibility="invisible" />
 
     </LinearLayout>
 
