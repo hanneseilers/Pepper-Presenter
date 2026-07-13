@@ -116,12 +116,9 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks,
         val server = wsServer ?: return
         val title = editTextTitle.text.toString()
         val text = editTextContent.text.toString()
-        try {
-            server.sendPresentation(title, text)
-            Toast.makeText(this, R.string.msg_ws_sent, Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            Toast.makeText(this, R.string.msg_ws_send_error, Toast.LENGTH_SHORT).show()
-        }
+        val success = server.sendPresentation(title, text)
+        val msgRes = if (success) R.string.msg_ws_sent else R.string.msg_ws_send_error
+        Toast.makeText(this, msgRes, Toast.LENGTH_SHORT).show()
     }
 
     private fun closeWebSocketConnection() {

@@ -20,6 +20,7 @@ class PresentationWebSocketServer(
     private var activeConnection: WebSocket? = null
 
     override fun onOpen(conn: WebSocket, handshake: ClientHandshake) {
+        activeConnection?.close()
         activeConnection = conn
         listener.onClientConnected()
     }
@@ -37,8 +38,8 @@ class PresentationWebSocketServer(
             val title = json.optString("title", "")
             val text = json.optString("text", "")
             listener.onMessageReceived(title, text)
-        } catch (_: Exception) {
-            // ignore malformed messages
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -50,15 +51,17 @@ class PresentationWebSocketServer(
         // server started successfully
     }
 
-    fun sendPresentation(title: String, text: String) {
-        val conn = activeConnection ?: return
-        try {
+    fun sendPresentation(title: String, text: String): Boolean {
+        val conn = activeConnection ?: return false
+        return try {
             val json = org.json.JSONObject()
             json.put("title", title)
             json.put("text", text)
             conn.send(json.toString())
+            true
         } catch (e: Exception) {
             e.printStackTrace()
+            false
         }
     }
 
