@@ -8,6 +8,7 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
+import com.aldebaran.qi.sdk.QiContext
 import com.aldebaran.qi.sdk.QiSDK
 import com.aldebaran.qi.sdk.RobotLifecycleCallbacks
 import com.aldebaran.qi.sdk.builder.SayBuilder
@@ -15,14 +16,14 @@ import com.aldebaran.qi.sdk.`object`.conversation.Phrase
 import com.aldebaran.qi.sdk.`object`.conversation.Say
 import com.aldebaran.qi.sdk.`object`.touch.TouchSensor
 import com.aldebaran.qi.sdk.design.activity.RobotActivity
-import com.aldebaran.qi.sdk.robot.RobotContext
+import com.aldebaran.qi.sdk.design.activity.conversationstatus.SpeechBarDisplayStrategy
 
 /**
  * Full-screen black activity that speaks a presentation sentence by sentence.
  *
- * The first sentence is spoken automatically when the robot gains focus.
- * Each subsequent sentence — and the final return to [MainActivity] — is
- * triggered by touching the head-middle touch sensor or either rear bumper.
+ * Every sentence — including the first — is triggered by touching the head
+ * sensor or one of the three foot bumpers.  After the last sentence has been
+ * spoken, one additional touch returns to [MainActivity].
  */
 class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
 
@@ -37,13 +38,14 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
 
     // Names of the touch sensors we listen to
     private val sensorNames = listOf(
-        "Head/Touch/Middle",
-        "Bumper/Back/Left",
-        "Bumper/Back/Right"
+        "Head/Touch",
+        "Bumper/FrontLeft",
+        "Bumper/FrontRight",
+        "Bumper/Back"
     )
 
     private lateinit var sentences: List<String>
-    private var currentIndex = 0
+    private var currentIndex = -1
 
     /** True while the robot is currently speaking a sentence. */
     @Volatile
@@ -71,6 +73,8 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setSpeechBarDisplayStrategy(SpeechBarDisplayStrategy.IMMERSIVE)
+
         // Keep screen on and make it fully black (hide system UI)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         hideSystemUI()
@@ -95,9 +99,10 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
 
     // ── RobotLifecycleCallbacks ──────────────────────────────────────────────
 
-    override fun onRobotFocusGained(robotContext: RobotContext) {
+    override fun onRobotFocusGained(robotContext: QiContext) {
         setupTouchListeners(robotContext)
-        speakCurrent(robotContext)
+        // Wait for the first sensor touch before speaking the first sentence
+        isWaitingForTouch = true
     }
 
     override fun onRobotFocusLost() {
@@ -109,7 +114,7 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
 
     // ── Touch / Bumper listeners ─────────────────────────────────────────────
 
-    private fun setupTouchListeners(robotContext: RobotContext) {
+    private fun setupTouchListeners(robotContext: QiContext) {
         val touch = robotContext.touch
         sensorNames.forEach { name ->
             try {
@@ -131,7 +136,7 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
      * Synchronized to prevent two rapid touches from both advancing the index.
      */
     @Synchronized
-    private fun handleAdvance(robotContext: RobotContext) {
+    private fun handleAdvance(robotContext: QiContext) {
         if (!isWaitingForTouch) return
         isWaitingForTouch = false
 
@@ -151,7 +156,7 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
     }
 
     /** Speaks [sentences][currentIndex] and sets state flags before and after. */
-    private fun speakCurrent(robotContext: RobotContext) {
+    private fun speakCurrent(robotContext: QiContext) {
         isSpeaking = true
         isWaitingForTouch = false
         SayBuilder.with(robotContext)

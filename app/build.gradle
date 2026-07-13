@@ -10,11 +10,17 @@ android {
     defaultConfig {
         applicationId "de.hanneseilers.pepper_presenter"
         minSdk 23
+        //noinspection OldTargetApi
         targetSdk 33
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+
+        ndk{
+            //noinspection ChromeOsAbiSupport
+            abiFilters 'armeabi-v7a', 'x86'
+        }
     }
 
     buildTypes {
@@ -23,18 +29,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    
+    kotlinOptions {
+        jvmTarget = '17'
     }
 
 }
 
 dependencies {
-
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+	implementation 'com.aldebaran:qisdk:1.7.5'
+	implementation 'com.aldebaran:qisdk-design:1.7.5'
+    implementation 'org.java-websocket:Java-WebSocket:1.5.4'
 }

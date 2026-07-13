@@ -6,13 +6,22 @@
     <string name="button_new">New</string>
     <string name="button_load">Load</string>
     <string name="button_save">Save</string>
+    <string name="button_delete">Delete</string>
     <string name="button_speak">Speak</string>
     <string name="dialog_load_title">Load Presentation</string>
+    <string name="dialog_delete_title">Delete Presentation</string>
     <string name="dialog_no_presentations">No saved presentations found.</string>
     <string name="msg_saved">Presentation saved.</string>
     <string name="msg_save_error">Failed to save presentation.</string>
     <string name="msg_load_error">Failed to load presentation.</string>
+    <string name="msg_deleted">Presentation deleted.</string>
+    <string name="msg_delete_error">Failed to delete presentation.</string>
     <string name="msg_title_required">Please enter a title.</string>
     <string name="msg_content_required">Please enter some text.</string>
     <string name="msg_robot_not_ready">Robot not ready yet.</string>
+    <string name="ws_send">Send via WebSocket</string>
+    <string name="ws_cancel">Close WebSocket connection</string>
+    <string name="msg_ws_sent">Sent via WebSocket.</string>
+    <string name="msg_ws_send_error">Failed to send via WebSocket.</string>
+    <string name="haw_logo">HAW Kiel Logo</string>
 </resources>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pepper Presenter – Web Client</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      padding: 2rem 2.5rem;
+      width: 100%;
+      max-width: 520px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      color: #333;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    h1 svg { flex-shrink: 0; }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      color: #666;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ccc;
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+    .dot.connected    { background: #4caf50; }
+    .dot.connecting   { background: #ff9800; }
+    .dot.disconnected { background: #f44336; }
+
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 0.3rem;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.95rem;
+      color: #222;
+      background: #fafafa;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      outline: none;
+      border-color: #6c8ebf;
+      background: #fff;
+    }
+
+    textarea { min-height: 120px; }
+
+    .row {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .row input { flex: 1; }
+
+    .field { margin-bottom: 1rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1.1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .btn-connect    { background: #6c8ebf; color: #fff; }
+    .btn-send       { background: #4caf50; color: #fff; }
+    .btn-disconnect { background: #f44336; color: #fff; }
+
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    #log {
+      margin-top: 1.5rem;
+      background: #f7f7f7;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-size: 0.78rem;
+      color: #555;
+      max-height: 140px;
+      overflow-y: auto;
+      font-family: monospace;
+    }
+
+    #log p { margin: 0.15rem 0; }
+    #log p.info  { color: #1565c0; }
+    #log p.ok    { color: #2e7d32; }
+    #log p.warn  { color: #e65100; }
+    #log p.err   { color: #c62828; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6c8ebf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"/><path d="M6.3 6.3A8 8 0 1 0 17.7 17.7"/><path d="M2.1 2.1A15 15 0 1 0 21.9 21.9"/>
+    </svg>
+    Pepper Presenter
+  </h1>
+
+  <div class="status-bar">
+    <div class="dot" id="dot"></div>
+    <span id="statusText">Disconnected</span>
+  </div>
+
+  <!-- Connection row -->
+  <div class="row">
+    <input type="text" id="ipInput" placeholder="Robot IP address (e.g. 192.168.1.42)" />
+    <button class="btn btn-connect" id="btnConnect" onclick="connect()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      Connect
+    </button>
+  </div>
+
+  <!-- Title field -->
+  <div class="field">
+    <label for="titleInput">Title</label>
+    <input type="text" id="titleInput" placeholder="Presentation title" />
+  </div>
+
+  <!-- Text field -->
+  <div class="field">
+    <label for="textInput">Text</label>
+    <textarea id="textInput" placeholder="Presentation text"></textarea>
+  </div>
+
+  <!-- Action buttons -->
+  <div class="actions">
+    <button class="btn btn-send" id="btnSend" disabled onclick="sendData()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      Send
+    </button>
+    <button class="btn btn-disconnect" id="btnDisconnect" disabled onclick="disconnect()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Close Connection
+    </button>
+  </div>
+
+  <!-- Event log -->
+  <div id="log"></div>
+</div>
+
+<script>
+  const WS_PORT = 8887;
+  let ws = null;
+
+  const dot          = document.getElementById('dot');
+  const statusText   = document.getElementById('statusText');
+  const btnConnect   = document.getElementById('btnConnect');
+  const btnSend      = document.getElementById('btnSend');
+  const btnDisconnect = document.getElementById('btnDisconnect');
+  const ipInput      = document.getElementById('ipInput');
+  const titleInput   = document.getElementById('titleInput');
+  const textInput    = document.getElementById('textInput');
+  const log          = document.getElementById('log');
+
+  function addLog(msg, cls = 'info') {
+    const p = document.createElement('p');
+    p.className = cls;
+    const ts = new Date().toLocaleTimeString();
+    p.textContent = `[${ts}] ${msg}`;
+    log.prepend(p);
+  }
+
+  function setStatus(state) {
+    dot.className = 'dot ' + state;
+    statusText.textContent = state.charAt(0).toUpperCase() + state.slice(1);
+    const connected = state === 'connected';
+    btnSend.disabled = !connected;
+    btnDisconnect.disabled = !connected;
+    btnConnect.disabled = state === 'connecting' || connected;
+    ipInput.disabled = connected || state === 'connecting';
+  }
+
+  function connect() {
+    const ip = ipInput.value.trim();
+    if (!ip) { addLog('Please enter the robot IP address.', 'warn'); return; }
+    if (ws) { ws.close(); }
+    setStatus('connecting');
+    addLog(`Connecting to ws://${ip}:${WS_PORT} …`);
+    try {
+      ws = new WebSocket(`ws://${ip}:${WS_PORT}`);
+    } catch (e) {
+      addLog(`Failed to create WebSocket: ${e.message}`, 'err');
+      setStatus('disconnected');
+      return;
+    }
+
+    ws.onopen = () => {
+      setStatus('connected');
+      addLog('Connected.', 'ok');
+    };
+
+    ws.onclose = (e) => {
+      setStatus('disconnected');
+      addLog(`Connection closed (code ${e.code}).`, 'warn');
+      ws = null;
+    };
+
+    ws.onerror = () => {
+      addLog('WebSocket error.', 'err');
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.title !== undefined) titleInput.value = data.title;
+        if (data.text  !== undefined) textInput.value  = data.text;
+        const parts = [];
+        if (data.title !== undefined) parts.push(`title="${data.title}"`);
+        if (data.text  !== undefined) parts.push(`text="${data.text}"`);
+        addLog(`Received: ${parts.join(', ')}`, 'ok');
+      } catch (e) {
+        addLog(`Received non-JSON message: ${event.data}`, 'warn');
+      }
+    };
+  }
+
+  function sendData() {
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+      addLog('Not connected.', 'warn'); return;
+    }
+    const payload = JSON.stringify({ title: titleInput.value, text: textInput.value });
+    ws.send(payload);
+    addLog(`Sent: ${payload}`, 'ok');
+  }
+
+  function disconnect() {
+    if (ws) {
+      ws.close();
+      ws = null;
+    }
+    setStatus('disconnected');
+    addLog('Disconnected.', 'warn');
+  }
+
+  // Allow pressing Enter in the IP field to connect
+  ipInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') connect(); });
+
+  setStatus('disconnected');
+</script>
+</body>
+</html>

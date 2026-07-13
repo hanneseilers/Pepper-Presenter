@@ -1,10 +1,6 @@
 package de.hanneseilers.pepper_presenter
 
 import android.content.Context
-import com.aldebaran.qi.sdk.builder.SayBuilder
-import com.aldebaran.qi.sdk.`object`.conversation.Phrase
-import com.aldebaran.qi.sdk.`object`.conversation.Say
-import com.aldebaran.qi.sdk.robot.RobotContext
 import java.io.File
 import java.io.IOException
 
@@ -43,7 +39,7 @@ class PresentationManager {
     }
 
     /**
-     * Loads a presentation from [file].
+     * Loads a presentation from [File].
      * @return The loaded [Presentation], or `null` if the file cannot be read.
      */
     fun load(context: Context, fileName: String): Presentation? {
@@ -68,18 +64,12 @@ class PresentationManager {
             ?.sorted()
             ?: emptyList()
 
-    // ── Speech ───────────────────────────────────────────────────────────────
-
     /**
-     * Makes Pepper say [text] using the provided [robotContext].
-     * The call is asynchronous and returns immediately.
-     * Errors during speech synthesis are silently ignored.
+     * Deletes the presentation stored under [fileName].
+     * @return `true` on success, `false` if the file does not exist or deletion failed.
      */
-    fun speak(robotContext: RobotContext, text: String) {
-        SayBuilder.with(robotContext)
-            .withPhrase(Phrase(text))
-            .buildAsync()
-            .andThenCompose { say: Say -> say.async().run() }
-            .thenConsume { /* errors are intentionally swallowed here */ }
+    fun delete(context: Context, fileName: String): Boolean {
+        val file = File(storageDir(context), fileName)
+        return file.exists() && file.delete()
     }
 }
