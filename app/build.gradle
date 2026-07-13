@@ -46,4 +46,5 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
 	implementation 'com.aldebaran:qisdk:1.7.5'
 	implementation 'com.aldebaran:qisdk-design:1.7.5'
+    implementation 'org.java-websocket:Java-WebSocket:1.5.4'
 }

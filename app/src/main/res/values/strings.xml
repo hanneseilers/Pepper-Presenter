@@ -19,4 +19,8 @@
     <string name="msg_title_required">Please enter a title.</string>
     <string name="msg_content_required">Please enter some text.</string>
     <string name="msg_robot_not_ready">Robot not ready yet.</string>
+    <string name="ws_send">Send via WebSocket</string>
+    <string name="ws_cancel">Close WebSocket connection</string>
+    <string name="msg_ws_sent">Sent via WebSocket.</string>
+    <string name="msg_ws_send_error">Failed to send via WebSocket.</string>
 </resources>

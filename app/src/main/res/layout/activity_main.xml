@@ -7,15 +7,44 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/editTextTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_title"
-        android:inputType="text"
-        android:maxLines="1"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/editTextTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/hint_title"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/buttonWsSend"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_ws_send"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/ws_send"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/buttonWsCancel"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_ws_cancel"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/ws_cancel"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/editTextContent"
