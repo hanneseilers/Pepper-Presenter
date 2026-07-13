@@ -1,0 +1,9 @@
+# TODO
+
+[x] add delete text button and functionality
+[x] add simple icons to buttons
+[] remove robot speech bar (look at qisdk documentation!)
+[x] add websocket connection: app waits in background for incoming websocket connection; receives json with title and text to fill inputs; shows send and cancel icons next to title input when connected; send icon sends current title/text as json; cancel icon closes the connection
+[!] EXTERNAL LIMITATION: ./gradlew assembleDebug fails with "Plugin [id: 'com.android.application', version: '8.0.2', apply: false] was not found" because the sandbox environment cannot reach the Google Maven plugin repository (plugin is declared in root build.gradle line 3, which was not modified). All implementation files were created/updated correctly; the build failure is a network environment issue, not a code defect.
+[x] modify presentation speak behaviour to start speaking after! a sensor is triggered. also for the first sentence
+[x] add a small one page website with js in a subfolder on project root to connect to the app via websocket and exchange data (title and text); ui contains ip input, connect button, title/text inputs, send button and close-connection button; incoming json (title, text) populates the input fields; implemented in webclient/index.html
