@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/textVoiceSpeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
+
+    <SeekBar
+        android:id="@+id/seekVoiceSpeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="150" />
+
+    <TextView
+        android:id="@+id/textVoicePitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp" />
+
+    <SeekBar
+        android:id="@+id/seekVoicePitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="150" />
+</LinearLayout>

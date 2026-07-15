@@ -5,8 +5,12 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.aldebaran.qi.sdk.QiSDK
 import com.aldebaran.qi.sdk.RobotLifecycleCallbacks
 import com.aldebaran.qi.sdk.builder.SayBuilder
@@ -21,11 +25,13 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks,
 
     private lateinit var editTextTitle: EditText
     private lateinit var editTextContent: EditText
+    private lateinit var bottomSpacer: View
     private lateinit var buttonNew: Button
     private lateinit var buttonLoad: Button
     private lateinit var buttonSave: Button
     private lateinit var buttonDelete: Button
     private lateinit var buttonSpeak: Button
+    private lateinit var buttonSettings: ImageButton
     private lateinit var buttonWsSend: ImageButton
     private lateinit var buttonWsCancel: ImageButton
 
@@ -38,6 +44,7 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks,
 
     companion object {
         private const val WS_PORT = 8887
+        private const val BOTTOM_SPACER_HEIGHT_DP = 72
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,11 +55,13 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks,
 
         editTextTitle = findViewById(R.id.editTextTitle)
         editTextContent = findViewById(R.id.editTextContent)
+        bottomSpacer = findViewById(R.id.bottomSpacer)
         buttonNew = findViewById(R.id.buttonNew)
         buttonLoad = findViewById(R.id.buttonLoad)
         buttonSave = findViewById(R.id.buttonSave)
         buttonDelete = findViewById(R.id.buttonDelete)
         buttonSpeak = findViewById(R.id.buttonSpeak)
+        buttonSettings = findViewById(R.id.buttonSettings)
         buttonWsSend = findViewById(R.id.buttonWsSend)
         buttonWsCancel = findViewById(R.id.buttonWsCancel)
 
@@ -61,9 +70,11 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks,
         buttonSave.setOnClickListener { savePresentation() }
         buttonDelete.setOnClickListener { showDeleteDialog() }
         buttonSpeak.setOnClickListener { speakPresentation() }
+        buttonSettings.setOnClickListener { showVoiceSettingsDialog() }
         buttonWsSend.setOnClickListener { sendViaWebSocket() }
         buttonWsCancel.setOnClickListener { closeWebSocketConnection() }
 
+        applySystemInsets()
         startWebSocketServer()
     }
 
@@ -125,12 +136,72 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks,
         wsServer?.closeActiveConnection()
     }
 
+    private fun applySystemInsets() {
+        val density = resources.displayMetrics.density
+        val baseHeight = (BOTTOM_SPACER_HEIGHT_DP * density).toInt()
+        ViewCompat.setOnApplyWindowInsetsListener(bottomSpacer) { view, insets ->
+            val bottomInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+            view.layoutParams = view.layoutParams.apply {
+                height = baseHeight + bottomInset
+            }
+            insets
+        }
+        ViewCompat.requestApplyInsets(bottomSpacer)
+    }
+
+    private fun showVoiceSettingsDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_voice_settings, null)
+        val speedLabel = dialogView.findViewById<TextView>(R.id.textVoiceSpeed)
+        val pitchLabel = dialogView.findViewById<TextView>(R.id.textVoicePitch)
+        val speedSeek = dialogView.findViewById<SeekBar>(R.id.seekVoiceSpeed)
+        val pitchSeek = dialogView.findViewById<SeekBar>(R.id.seekVoicePitch)
+
+        val currentSpeed = VoiceSettings.getSpeed(this)
+        val currentPitch = VoiceSettings.getPitch(this)
+        speedSeek.progress = currentSpeed - VoiceSettings.MIN_VALUE
+        pitchSeek.progress = currentPitch - VoiceSettings.MIN_VALUE
+
+        fun updateLabels() {
+            val speed = VoiceSettings.MIN_VALUE + speedSeek.progress
+            val pitch = VoiceSettings.MIN_VALUE + pitchSeek.progress
+            speedLabel.text = getString(R.string.voice_speed_format, speed)
+            pitchLabel.text = getString(R.string.voice_pitch_format, pitch)
+        }
+
+        val listener = object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                updateLabels()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+        }
+
+        speedSeek.setOnSeekBarChangeListener(listener)
+        pitchSeek.setOnSeekBarChangeListener(listener)
+        updateLabels()
+
+        AlertDialog.Builder(this)
+            .setTitle(R.string.dialog_voice_settings_title)
+            .setView(dialogView)
+            .setNegativeButton(R.string.dialog_cancel, null)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                VoiceSettings.save(
+                    this,
+                    VoiceSettings.MIN_VALUE + speedSeek.progress,
+                    VoiceSettings.MIN_VALUE + pitchSeek.progress
+                )
+            }
+            .show()
+    }
+
     // ── RobotLifecycleCallbacks ──────────────────────────────────────────────
 
     override fun onRobotFocusGained(context: QiContext) {
         robotContext = context
         SayBuilder.with(context)
-            .withPhrase(Phrase("Es kann losgehen"))
+            .withPhrase(Phrase(VoiceSettings.applyToText(this, "Es kann losgehen")))
             .buildAsync()
             .andThenCompose {
                     say: Say -> say.async().run()
@@ -229,7 +300,7 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks,
         }
 
         val sentences = ArrayList(content.split("\n").map { it.trim() }.filter { it.isNotBlank() })
+        closeWebSocketConnection()
         startActivity(SpeakActivity.createIntent(this, sentences))
     }
 }
-

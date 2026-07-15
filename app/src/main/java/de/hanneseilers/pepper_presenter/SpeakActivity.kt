@@ -160,7 +160,7 @@ class SpeakActivity : RobotActivity(), RobotLifecycleCallbacks {
         isSpeaking = true
         isWaitingForTouch = false
         SayBuilder.with(robotContext)
-            .withPhrase(Phrase(sentences[currentIndex]))
+            .withPhrase(Phrase(VoiceSettings.applyToText(this, sentences[currentIndex])))
             .buildAsync()
             .andThenCompose { say: Say -> say.async().run() }
             .thenConsume {
