@@ -24,4 +24,9 @@
     <string name="msg_ws_sent">Sent via WebSocket.</string>
     <string name="msg_ws_send_error">Failed to send via WebSocket.</string>
     <string name="haw_logo">HAW Kiel Logo</string>
+    <string name="settings">Settings</string>
+    <string name="dialog_voice_settings_title">Voice settings</string>
+    <string name="voice_speed_format">Voice speed: %1$d%%</string>
+    <string name="voice_pitch_format">Voice pitch: %1$d%%</string>
+    <string name="dialog_cancel">Cancel</string>
 </resources>
